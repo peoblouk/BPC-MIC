@@ -110,23 +110,21 @@ interrupt VectorNumber_Vkeyboard void kbiISR(void)
 
 ## Nastavení Time of Day interruptu
 - Zápis do registrů nad EnableInterrupts()!!!!!
-
--   TODC REGISTR
--       TODC_TODCLKS - Nastavení používaného hodinového vstupu
--           Na hodinách jsme používali buď LPO nebo OSCOUT
--           00 - OSCOUT            
--           01 - LPO
--       TODC_TODPS - Nastavení předděličky
--           00 - Použijeme pro LPO
--           01 - Použijeme pro OSCOUT
--
+- TODC REGISTR
+- TODC_TODCLKS - Nastavení používaného hodinového vstupu
+- Na hodinách jsme používali buď LPO nebo OSCOUT
+- 00 - OSCOUT            
+- 01 - LPO
+- TODC_TODPS - Nastavení předděličky
+-  00 - Použijeme pro LPO
+-  01 - Použijeme pro OSCOUT
 -   TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/ <b>TODC  |= TODC_TODEN_MASK; </b>
 
--   TODSC REGISTR
--       TODSC_MTCHEN - Povoléní matchování
--       TODSC_MTCHIE - Povolení přerušení při každé match-sekundě
--       TODSC_QSECIE - Povolení přerušení při každé čtvrt-sekundě
--       TODSC_SECIE  - Povolení přerušení při každé sekundě
+-   TODSC REGISTR ->
+- 	TODSC_MTCHEN - Povoléní matchování
+- 	TODSC_MTCHIE - Povolení přerušení při každé match-sekundě
+- 	TODSC_QSECIE - Povolení přerušení při každé čtvrt-sekundě
+- 	TODSC_SECIE  - Povolení přerušení při každé sekundě
 -   POKUD SE POUŽÍVÁ MATCH, JE TŘEBA NASTAVIT MATCH HODNOTU
 -   TODM - Match registr. Vložit do něj počet požadovaných Match-sekund
 
