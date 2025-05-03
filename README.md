@@ -1,31 +1,77 @@
 <!-- @format -->
 <h1 align="center">
-  <img alt="logo" src="img/logo.png" > BPC-ALD 
+  <img alt="logo" src="logo.png" > BPC-ALD 
 </h1>
 
-<b>Slovník</b>
-- Iterátor - slouží obečně pro iterování v nějakém souboru dat (neboli procházení třeba jednotlivých složkách seznamu
-- ADT - alternativní datový typ
-- časová Amortizace - znamená, že když dojde k naplnění například pole, tak se dopředu naalokuje 2x více paměti, naopak při odstraňování když klesne na 75% kapacity, tak se pole uvolní
+Definice proměnných pro radost
+```
+typedef unsigned char uint8_t;
+typedef unsigned int uint16_t;
+```
 ----------------------------------------------
-## TVector
+```
+/*
+*  Pull-up odpory pro tlacitka
+*/
+const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
+                                | PTAPE_PTAPE4_MASK   // SW3
+                                | PTAPE_PTAPE7_MASK;  // SW2
+      // SW4 už pull-up má, tudíž není třeba nastavovat
 
-- Typ Vector spravuje dynamicky alokované pole prvků typu VectorElement a umožňuje s nimi pracovat pomocí definovaného API
-  
-- <b>POZOR !!! Pokud jsem změnil typ TVectorElement z int na char musím najít makro #define TVECTOR_ELEMENT_FRMSTR   "%d" </b>
+PTAPE = PTAPE_INIT_VAL;
+```
+```
+/*
+*   Nastavení směru toku dat na portech LED
+*   0 - Input           1 - Output          
+*/
+const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
+                                | PTCDD_PTCDD3_MASK   // LED2
+                                | PTCDD_PTCDD4_MASK   // LED3
+                                | PTCDD_PTCDD5_MASK;  // LED4
+ 
+PTCDD = PTCDD_INIT_VAL;
+```
 
 ```
-struct TVector
-	{
-	TVectorElement *iValues;	///< Ukazatel na počáteční prvek pole hodnot typu VectorElement
-	size_t iSize;	           	///< Počet elementů vektoru
-	};
-struct TVectorIterator
-	{
-	struct TVector *iVector;	///< Ukazatel na navázaný vektor (mutable iterátor - umožňuje měnit elementy VectorElement)
-	size_t iPos;			///< Aktuální pozice pro indexaci elementu v navázaném vektoru
-	};
-```
-<img alt="TVector_funkce" src="img/tvector_funkce.png" >
+/*
+*   Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
+*   PULL-UP OFF
+*   1 - Sepnuto; 0 - Rozepnuto
+*   PULL-UP ON
+*   1 - Rozepnuto; 0 - Sepnuto    
+*/
+PTAD_PTAD6; // SW1
+PTAD_PTAD7; // SW2
+PTAD_PTAD4; // SW3 
+PTAD_PTCD7; // SW4
 
-----------------------------------------------
+/*
+*   Nastavení IRQ interruptu. Zápis do IRQSC nad EnableInterrupts()!!!!!
+*
+*   IRQSC_IRQIE_MASK  - Povolení interruptu
+*   IRQSC_IRQACK_MASK - Zápis pro clear náhodného interruptu při startu
+*   IRQSC_IRQPE_MASK - Povolení pinu (SW4) jako generátoru IRQ interruptu
+*   IRQSC_IRQPDD_MASK - Disable interniho pull-up odporu (davame protoze uz tam jeden pull up mame)
+*   IRQSC_IRQEDG_MASK - Pokud přidáme, generuje interrupt na rising edge (tzn. na rozepnutí tlačítka)
+*/
+const uint8_t IRQSC_INIT_VAL  	= IRQSC_IRQIE_MASK
+								| IRQSC_IRQACK_MASK
+								| IRQSC_IRQPE_MASK
+								| IRQSC_IRQPDD_MASK
+                                /*| IRQSC_IRQEDG_MASK*/;
+IRQSC = IRQSC_INIT_VAL;
+
+//Interrupt IRQ ISR   -  Hlavička
+interrupt VectorNumber_Virq void irqISR(void);
+
+//Interrupt IRQ ISR   -  Základní tělo
+interrupt VectorNumber_Virq void irqISR(void)
+{
+    /*Interrupt handler*/
+
+    IRQSC_IRQACK = 1; // ACK interruptu
+}
+```
+
+
