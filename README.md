@@ -34,7 +34,7 @@ PTCDD = PTCDD_INIT_VAL;
 ```
 ----------------------------------------------
 
-Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
+## Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
 - Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
 - PULL-UP OFF
 - 1 - Sepnuto; 0 - Rozepnuto
