@@ -9,10 +9,8 @@ typedef unsigned char uint8_t;
 typedef unsigned int uint16_t;
 ```
 ----------------------------------------------
+##Pull-up odpory pro tlacitka
 ```
-/*
-*  Pull-up odpory pro tlacitka
-*/
 const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
                                 | PTAPE_PTAPE4_MASK   // SW3
                                 | PTAPE_PTAPE7_MASK;  // SW2
@@ -20,10 +18,13 @@ const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
 
 PTAPE = PTAPE_INIT_VAL;
 ```
+----------------------------------------------
+##Nastavení směru toku dat na portech LED
+<b> 0 - Input           1 - Output</b>
 ```
 /*
-*   Nastavení směru toku dat na portech LED
-*   0 - Input           1 - Output          
+*   
+*       
 */
 const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
                                 | PTCDD_PTCDD3_MASK   // LED2
@@ -32,19 +33,23 @@ const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
  
 PTCDD = PTCDD_INIT_VAL;
 ```
-
-```
-/*
+----------------------------------------------
+Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
 *   Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
 *   PULL-UP OFF
 *   1 - Sepnuto; 0 - Rozepnuto
 *   PULL-UP ON
-*   1 - Rozepnuto; 0 - Sepnuto    
-*/
+*   1 - Rozepnuto; 0 - Sepnuto
+
 PTAD_PTAD6; // SW1
 PTAD_PTAD7; // SW2
 PTAD_PTAD4; // SW3 
 PTAD_PTCD7; // SW4
+
+```
+/*
+*/
+----------------------------------------------
 
 /*
 *   Nastavení IRQ interruptu. Zápis do IRQSC nad EnableInterrupts()!!!!!
@@ -73,5 +78,6 @@ interrupt VectorNumber_Virq void irqISR(void)
     IRQSC_IRQACK = 1; // ACK interruptu
 }
 ```
+
 
 
