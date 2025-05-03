@@ -112,13 +112,9 @@ interrupt VectorNumber_Vkeyboard void kbiISR(void)
 - Zápis do registrů nad EnableInterrupts()!!!!!
 - TODC REGISTR
 - TODC_TODCLKS - Nastavení používaného hodinového vstupu
-- Na hodinách jsme používali buď LPO nebo OSCOUT
-- 00 - OSCOUT            
-- 01 - LPO
-- TODC_TODPS - Nastavení předděličky
--  00 - Použijeme pro LPO
--  01 - Použijeme pro OSCOUT
--   TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/ <b>TODC  |= TODC_TODEN_MASK; </b>
+- Na hodinách jsme používali buď LPO nebo OSCOUT (00 - OSCOUT; 01 - LPO)
+- TODC_TODPS - Nastavení předděličky (00 - Použijeme pro LPO; 01 - Použijeme pro OSCOUT)
+- TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/ <b>TODC  |= TODC_TODEN_MASK; </b>
 
 -   TODSC REGISTR ->
 - 	TODSC_MTCHEN - Povoléní matchování
@@ -128,9 +124,8 @@ interrupt VectorNumber_Vkeyboard void kbiISR(void)
 -   POKUD SE POUŽÍVÁ MATCH, JE TŘEBA NASTAVIT MATCH HODNOTU
 -   TODM - Match registr. Vložit do něj počet požadovaných Match-sekund
 
-```
 // UKÁZKA NASTAVENÍ TODC REGISTRU
-//-----------
+```
 // Pokud se používají LPO 
 const uint8_t TODC_INIT_VAL = TODC_TODCLKS0_MASK; 
 
@@ -142,7 +137,9 @@ const uint8_t ICSC2_INIT_VAL    = ICSC2_EREFS_MASK
 			                    | ICSC2_ERCLKEN_MASK;
 TODC =  TODC_INIT_VAL;
 ICSC2 = ICSC2_INIT_VAL;
+```
 
+```
 //-----------
 // UKÁZKA NASTAVENÍ TODSC REGISTRU A MATCH REGISTRU
 //-----------
