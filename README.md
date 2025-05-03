@@ -22,7 +22,8 @@ PTAPE = PTAPE_INIT_VAL;
 ----------------------------------------------
 
 ## Nastavení směru toku dat na portech LED
-- <b> 0 - Input           1 - Output</b>
+- <b> 0 - Input
+- 1 - Output</b>
 ```
 const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
                                 | PTCDD_PTCDD3_MASK   // LED2
