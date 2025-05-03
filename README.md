@@ -3,13 +3,13 @@
   <img alt="logo" src="logo.png" > BPC-ALD 
 </h1>
 
-Definice proměnných pro radost
+## Definice proměnných pro radost
 ```
 typedef unsigned char uint8_t;
 typedef unsigned int uint16_t;
 ```
 ----------------------------------------------
-##Pull-up odpory pro tlacitka
+## Pull-up odpory pro tlacitka
 ```
 const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
                                 | PTAPE_PTAPE4_MASK   // SW3
@@ -18,14 +18,11 @@ const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
 
 PTAPE = PTAPE_INIT_VAL;
 ```
+
 ----------------------------------------------
-##Nastavení směru toku dat na portech LED
-<b> 0 - Input           1 - Output</b>
+## Nastavení směru toku dat na portech LED
+- <b> 0 - Input           1 - Output</b>
 ```
-/*
-*   
-*       
-*/
 const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
                                 | PTCDD_PTCDD3_MASK   // LED2
                                 | PTCDD_PTCDD4_MASK   // LED3
@@ -33,13 +30,15 @@ const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
  
 PTCDD = PTCDD_INIT_VAL;
 ```
+
 ----------------------------------------------
 Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
-*   Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
-*   PULL-UP OFF
-*   1 - Sepnuto; 0 - Rozepnuto
-*   PULL-UP ON
-*   1 - Rozepnuto; 0 - Sepnuto
+
+- Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
+- PULL-UP OFF
+- 1 - Sepnuto; 0 - Rozepnuto
+- PULL-UP ON
+- 1 - Rozepnuto; 0 - Sepnuto
 
 PTAD_PTAD6; // SW1
 PTAD_PTAD7; // SW2
@@ -47,10 +46,6 @@ PTAD_PTAD4; // SW3
 PTAD_PTCD7; // SW4
 
 ```
-/*
-*/
-----------------------------------------------
-
 /*
 *   Nastavení IRQ interruptu. Zápis do IRQSC nad EnableInterrupts()!!!!!
 *
@@ -78,6 +73,51 @@ interrupt VectorNumber_Virq void irqISR(void)
     IRQSC_IRQACK = 1; // ACK interruptu
 }
 ```
+----------------------------------------------
+## Nastavení KBI (Keyboard Interrupt)
 
+- Zápis do registrů nad EnableInterrupts()!!!!!
+- KBIPE REGISTR - Povolení generace interruptu z vybraných KBI pinů
 
+```
+const uint8_t KBIPE_INIT_VAL    = KBIPE_KBIPE6_MASK     // SW1
+                                | KBIPE_KBIPE7_MASK     // SW2
+                                | KBIPE_KBIPE4_MASK;    // SW3
+                                
+// PRO DETEKCI POUZE HRAN (VĚTŠINOU POŽADOVÁNO) 
+const uint8_t KBISC_INIT_VAL    = 0;       
+// PRO DETEKCI OBOU HRAN A ÚROVNĚ
+const uint8_t KBISC_INIT_VAL    = KBISC_KBIMOD_MASK;                                
+/*
+*   POSTUP ZAPNUTÍ KBI INTERRUPTU
+*/
+KBISC_KBIE = KBISC_INIT_VAL; 
+KBIPE = KBIPE_INIT_VAL;
+KBISC_KBACK = 1;
+KBISC_KBIE = 1;
+
+//Interrupt TOD ISR   -  Hlavička
+interrupt VectorNumber_Vkeyboard void kbiISR(void);
+
+//Interrupt TOD ISR   -  Základní tělo
+interrupt VectorNumber_Vkeyboard void kbiISR(void)
+{
+	KBISC_KBACK = 1;
+}
+```
+----------------------------------------------
+## Nastavení Time of Day interruptu
+- Zápis do registrů nad EnableInterrupts()!!!!!
+
+*   TODC REGISTR
+*       TODC_TODCLKS - Nastavení používaného hodinového vstupu
+*           Na hodinách jsme používali buď LPO nebo OSCOUT
+*           00 - OSCOUT            
+*           01 - LPO
+*       TODC_TODPS - Nastavení předděličky
+*           00 - Použijeme pro LPO
+*           01 - Použijeme pro OSCOUT
+*
+*   TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/  
+TODC  |= TODC_TODEN_MASK; 
 
