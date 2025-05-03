@@ -1,6 +1,6 @@
 <!-- @format -->
 <h1 align="center">
-  <img alt="logo" src="logo.png" > BPC-ALD 
+  <img alt="logo" src="logo.png" > BPC-MIC test 2 
 </h1>
 
 ## Definice proměnných pro radost
@@ -9,6 +9,7 @@ typedef unsigned char uint8_t;
 typedef unsigned int uint16_t;
 ```
 ----------------------------------------------
+
 ## Pull-up odpory pro tlacitka
 ```
 const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
@@ -18,8 +19,8 @@ const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
 
 PTAPE = PTAPE_INIT_VAL;
 ```
-
 ----------------------------------------------
+
 ## Nastavení směru toku dat na portech LED
 - <b> 0 - Input           1 - Output</b>
 ```
@@ -30,10 +31,9 @@ const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
  
 PTCDD = PTCDD_INIT_VAL;
 ```
-
 ----------------------------------------------
-Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
 
+Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
 - Čtení z tlačítek ("proměnné" co obsahují stav tlačítka)
 - PULL-UP OFF
 - 1 - Sepnuto; 0 - Rozepnuto
@@ -74,8 +74,8 @@ interrupt VectorNumber_Virq void irqISR(void)
 }
 ```
 ----------------------------------------------
-## Nastavení KBI (Keyboard Interrupt)
 
+## Nastavení KBI (Keyboard Interrupt)
 - Zápis do registrů nad EnableInterrupts()!!!!!
 - KBIPE REGISTR - Povolení generace interruptu z vybraných KBI pinů
 
@@ -106,18 +106,67 @@ interrupt VectorNumber_Vkeyboard void kbiISR(void)
 }
 ```
 ----------------------------------------------
+
 ## Nastavení Time of Day interruptu
 - Zápis do registrů nad EnableInterrupts()!!!!!
 
-*   TODC REGISTR
-*       TODC_TODCLKS - Nastavení používaného hodinového vstupu
-*           Na hodinách jsme používali buď LPO nebo OSCOUT
-*           00 - OSCOUT            
-*           01 - LPO
-*       TODC_TODPS - Nastavení předděličky
-*           00 - Použijeme pro LPO
-*           01 - Použijeme pro OSCOUT
-*
-*   TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/  
-TODC  |= TODC_TODEN_MASK; 
+-   TODC REGISTR
+-       TODC_TODCLKS - Nastavení používaného hodinového vstupu
+-           Na hodinách jsme používali buď LPO nebo OSCOUT
+-           00 - OSCOUT            
+-           01 - LPO
+-       TODC_TODPS - Nastavení předděličky
+-           00 - Použijeme pro LPO
+-           01 - Použijeme pro OSCOUT
+-
+-   TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/ <b>TODC  |= TODC_TODEN_MASK; </b>
+
+-   TODSC REGISTR
+-       TODSC_MTCHEN - Povoléní matchování
+-       TODSC_MTCHIE - Povolení přerušení při každé match-sekundě
+-       TODSC_QSECIE - Povolení přerušení při každé čtvrt-sekundě
+-       TODSC_SECIE  - Povolení přerušení při každé sekundě
+-   POKUD SE POUŽÍVÁ MATCH, JE TŘEBA NASTAVIT MATCH HODNOTU
+-   TODM - Match registr. Vložit do něj počet požadovaných Match-sekund
+
+```
+// UKÁZKA NASTAVENÍ TODC REGISTRU
+//-----------
+// Pokud se používají LPO 
+const uint8_t TODC_INIT_VAL = TODC_TODCLKS0_MASK; 
+
+TODC = TODC_INIT_VAL;
+
+// Pokud se používají OSCOUT
+const uint8_t TODC_INIT_VAL     = TODC_TODPS0_MASK;
+const uint8_t ICSC2_INIT_VAL    = ICSC2_EREFS_MASK
+			                    | ICSC2_ERCLKEN_MASK;
+TODC =  TODC_INIT_VAL;
+ICSC2 = ICSC2_INIT_VAL;
+
+//-----------
+// UKÁZKA NASTAVENÍ TODSC REGISTRU A MATCH REGISTRU
+//-----------
+const uint8_t TODSC_INIT_VAL    = TODSC_MTCHIE_MASK
+                                | TODSC_MTCHEN_MASK
+                                | TODSC_QSECIE_MASK
+                                | TODSC_SECIE_MASK;
+
+const uint8_t TODM_INIT_VAL = 4;
+
+TODSC = TODSC_INIT_VAL;
+TODM  = TODM_INIT_VAL;
+
+//Interrupt TOD ISR   -  Hlavička
+interrupt VectorNumber_Vtod void todISR(void);
+
+//Interrupt TOD ISR   -  Základní tělo
+interrupt VectorNumber_Vtod void todISR(void)
+{
+    /*Interrupt handler*/
+
+    TODSC = TODSC; // ACK interruptu
+}
+```
+----------------------------------------------
 
