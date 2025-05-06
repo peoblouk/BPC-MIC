@@ -48,6 +48,8 @@ PTAD_PTAD7; // SW2
 PTAD_PTAD4; // SW3 
 PTAD_PTCD7; // SW4
 
+<h1 align="center"> <img alt="irqsc" src="irqsc.png" > </h1>
+
 ```
 /*
 *   Nastavení IRQ interruptu. Zápis do IRQSC nad EnableInterrupts()!!!!!
