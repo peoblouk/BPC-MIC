@@ -1,4 +1,4 @@
-<!-- @format -->
+ <!-- @format -->
 <h1 align="center">
   <img alt="logo" src="logo.png" > BPC-MIC test 2 
 </h1>
@@ -11,6 +11,7 @@ typedef unsigned int uint16_t;
 ----------------------------------------------
 
 ## Pull-up odpory pro tlacitka
+PTAPE - nastavení pull up pro tlačítka
 ```
 const uint8_t PTAPE_INIT_VAL    = PTAPE_PTAPE6_MASK   // SW1
                                 | PTAPE_PTAPE4_MASK   // SW3
@@ -21,14 +22,15 @@ PTAPE = PTAPE_INIT_VAL;
 ```
 ----------------------------------------------
 
-## Nastavení směru toku dat na portech LED
-- <b> 0 - Input
-- 1 - Output</b>
+## Nastavení směru toku dat na portech LED -> 
+
+PTCDD - nastavení vesměru toku dat (vstup 0; výstup 1)
+PTCD - nastavení pull up pro ledky
 ```
-const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1
-                                | PTCDD_PTCDD3_MASK   // LED2
-                                | PTCDD_PTCDD4_MASK   // LED3
-                                | PTCDD_PTCDD5_MASK;  // LED4
+const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1 (build-in led)
+                                | PTCDD_PTCDD3_MASK   // LED2 (build-in led)
+                                | PTCDD_PTCDD4_MASK   // LED3 (build-in led)
+                                | PTCDD_PTCDD5_MASK;  // LED4 (build-in led)
  
 PTCDD = PTCDD_INIT_VAL;
 ```
