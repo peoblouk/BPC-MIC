@@ -122,6 +122,7 @@ interrupt VectorNumber_Vkeyboard void kbiISR(void)
 - Na hodinách jsme používali buď LPO nebo OSCOUT (00 - OSCOUT; 01 - LPO)
 - TODC_TODPS - Nastavení předděličky (00 - Použijeme pro LPO; 01 - Použijeme pro OSCOUT)
 - TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/ <b>TODC  |= TODC_TODEN_MASK; </b>
+<h1 align="center"> <img alt="irqsc" src="lh64_clk.png" > </h1>
 
 <h1 align="center"> <img alt="irqsc" src="todsc.png" > </h1>
 
@@ -177,5 +178,5 @@ interrupt VectorNumber_Vtod void todISR(void)
 
 ## Timer Pulse-Width Modulator
 
-
+<h1 align="center"> <img alt="irqsc" src="tpm.png" > </h1>
 
