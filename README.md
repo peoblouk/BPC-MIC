@@ -26,6 +26,9 @@ PTAPE = PTAPE_INIT_VAL;
 
 PTCDD - nastavení vesměru toku dat (vstup 0; výstup 1)
 PTCD - nastavení pull up pro ledky
+
+<h1 align="center"> <img alt="irqsc" src="lh64_pinout.png" > </h1>
+
 ```
 const uint8_t PTCDD_INIT_VAL    = PTCDD_PTCDD2_MASK   // LED1 (build-in led)
                                 | PTCDD_PTCDD3_MASK   // LED2 (build-in led)
@@ -120,6 +123,8 @@ interrupt VectorNumber_Vkeyboard void kbiISR(void)
 - TODC_TODPS - Nastavení předděličky (00 - Použijeme pro LPO; 01 - Použijeme pro OSCOUT)
 - TĚSNĚ PŘED EnableInterrupts je poté nutné povolit Time of Day pomocí následujícího řádku*/ <b>TODC  |= TODC_TODEN_MASK; </b>
 
+<h1 align="center"> <img alt="irqsc" src="todsc.png" > </h1>
+
 -   TODSC REGISTR ->
 - 	TODSC_MTCHEN - Povoléní matchování
 - 	TODSC_MTCHIE - Povolení přerušení při každé match-sekundě
@@ -169,4 +174,8 @@ interrupt VectorNumber_Vtod void todISR(void)
 }
 ```
 ----------------------------------------------
+
+## Timer Pulse-Width Modulator
+
+
 
